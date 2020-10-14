@@ -1,0 +1,31 @@
+{
+  "name": "nodejs-jwt-auth",
+  "version": "1.0.0",
+  "description": "Nodejs-JWT-Authentication-with-PostgreSQL-Sequelize-ORM",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Nodejs",
+    "Express",
+    "JWT",
+    "Sequelize",
+    "PostgreSQL",
+    "Authentication"
+  ],
+  "author": "grokonez.com",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "pg": "^7.5.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.39.0",
+    "sequelize-auto": "^0.6.3",
+    "swagger-jsdoc": "^4.3.0",
+    "swagger-ui-express": "^4.1.4"
+  }
+}
