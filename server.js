@@ -5,7 +5,7 @@ app.use(bodyParser.json());
 
 require("./app/router/router.js")(app);
 
-const db = require("./app/config/db.config.js");
+const { db } = require("./app/config/db.config.js");
 
 const Role = db.role;
 

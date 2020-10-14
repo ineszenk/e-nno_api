@@ -1,4 +1,4 @@
-const db = require("../config/db.config.js");
+const { db, static_db } = require("../config/db.config.js");
 const config = require("../config/config.js");
 const User = db.user;
 const Role = db.role;
@@ -110,16 +110,28 @@ exports.adminBoard = (req, res) => {
 
 exports.HydrauliqueGroup = async (req, res, next) => {
   const { startDate, endDate } = req.body;
+  const enno_serial = req.params.enno_serial;
 
   try {
+    // GET STATIC DATA FROM E-NNO BUILDING DATABASE
+    const buildingId = await static_db.multi(
+      `SELECT * FROM buildings where emulator_serial = '${enno_serial}'`
+    );
+    const admin = await static_db.multi(
+      `SELECT * FROM admins where id = ${buildingId[0][0].adminId}`
+    );
+    const archi_config = await static_db.multi(
+      `SELECT * FROM archiconfigs where buildingid = ${buildingId[0][0].id}`
+    );
+    const geo_config = await static_db.multi(
+      `SELECT * FROM geoconfigs where buildingid = ${buildingId[0][0].id}`
+    );
+
+    // GET HYDRAULIC GROUP DATA FROM DS DATABASE
     const gh_all = await Gh.findAll({
       where: {
         enno_serial: {
-          [Op.or]: [
-            `${req.params.enno_serial}-GH-A`,
-            `${req.params.enno_serial}-GH-B`,
-            req.params.enno_serial
-          ]
+          [Op.or]: [`${enno_serial}-GH-A`, `${enno_serial}-GH-B`, enno_serial]
         }
       }
     });
@@ -127,11 +139,7 @@ exports.HydrauliqueGroup = async (req, res, next) => {
     const gh = await Gh.findAll({
       where: {
         enno_serial: {
-          [Op.or]: [
-            `${req.params.enno_serial}-GH-A`,
-            `${req.params.enno_serial}-GH-B`,
-            req.params.enno_serial
-          ]
+          [Op.or]: [`${enno_serial}-GH-A`, `${enno_serial}-GH-B`, enno_serial]
         },
         [Op.or]: [
           {
@@ -143,14 +151,15 @@ exports.HydrauliqueGroup = async (req, res, next) => {
       }
     });
 
+    // GET PULSE CONSO DATA FROM DS DATABASE
     const pulse_all = await Pulse.findAll({
       where: {
         enno_serial: {
           [Op.or]: [
-            `${req.params.enno_serial}-Pulse`,
-            `${req.params.enno_serial}-Pulse1`,
-            `${req.params.enno_serial}-Pulse2`,
-            `${req.params.enno_serial}-Pulse3`
+            `${enno_serial}-Pulse`,
+            `${enno_serial}-Pulse1`,
+            `${enno_serial}-Pulse2`,
+            `${enno_serial}-Pulse3`
           ]
         }
       }
@@ -160,10 +169,10 @@ exports.HydrauliqueGroup = async (req, res, next) => {
       where: {
         enno_serial: {
           [Op.or]: [
-            `${req.params.enno_serial}-Pulse`,
-            `${req.params.enno_serial}-Pulse1`,
-            `${req.params.enno_serial}-Pulse2`,
-            `${req.params.enno_serial}-Pulse3`
+            `${enno_serial}-Pulse`,
+            `${enno_serial}-Pulse1`,
+            `${enno_serial}-Pulse2`,
+            `${enno_serial}-Pulse3`
           ]
         },
         [Op.or]: [
@@ -176,15 +185,16 @@ exports.HydrauliqueGroup = async (req, res, next) => {
       }
     });
 
+    // GET FTP CONSO DATA FROM DS DATABASE
     const ftp_all = await Ftp.findAll({
       where: {
-        enno_serial: `${req.params.enno_serial} FTP`
+        enno_serial: `${enno_serial} FTP`
       }
     });
 
     const ftp = await Ftp.findAll({
       where: {
-        enno_serial: `${req.params.enno_serial} FTP`,
+        enno_serial: `${enno_serial} FTP`,
         [Op.or]: [
           {
             tmp: {
@@ -195,12 +205,48 @@ exports.HydrauliqueGroup = async (req, res, next) => {
       }
     });
 
+    const meteo = await Meteo.findAll({
+      where: {
+        key: `meteonorm/:${geo_config[0][0].meteosite}`,
+        [Op.or]: [
+          {
+            tmp: {
+              [Op.between]: [startDate, endDate]
+            }
+          }
+        ]
+      }
+    });
+
+    const meteo_all = await Meteo.findAll({
+      where: {
+        key: `meteonorm/:${geo_config[0][0].meteosite}`
+      }
+    });
+
     res.status(200).json({
       description:
-        "Hydraulic group data (GH) - Consumption data (FTP, Pulse, Mbus)",
+        "Hydraulic group data (GH) - Consumption data (FTP, Pulse, Mbus) - Meteo - Static Database",
       GH: startDate ? gh : gh_all,
       PULSE: startDate ? pulse : pulse_all,
-      FTP: startDate ? ftp : ftp_all
+      FTP: startDate ? ftp : ftp_all,
+      METEO: startDate ? meteo : meteo_all,
+      STATIC: [
+        {
+          egid: geo_config.egid,
+          adresse:
+            geo_config[0][0].adresse +
+            " " +
+            geo_config[0][0].npa +
+            " " +
+            geo_config[0][0].commune,
+          SRE: archi_config[0][0].SRE,
+          affectation: archi_config[0][0].affectation,
+          client: admin[0][0].client,
+          gerance: admin[0][0].gerance,
+          manager: admin[0][0].manager
+        }
+      ]
     });
   } catch (error) {
     res.status(500).json({
