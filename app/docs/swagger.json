@@ -1,0 +1,253 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "E-nno Intern API",
+    "description": "This API allows to retrieve E-nno's device historical data",
+    "contact": {
+      "email": "support@e-nno.ch"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://e-nno_api/",
+      "description": "Production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Login",
+      "description": "Users Sign in"
+    },
+    {
+      "name": "Devices",
+      "description": "Devices historical retrieval"
+    }
+  ],
+  "paths": {
+    "/user/login": {
+      "post": {
+        "tags": [
+        "Login"
+        ],
+        "summary": "User Sign in",
+        "description": "Logs a user to the system",
+        "operationId": "logUser",
+        "requestBody": {
+          "description": "User's Credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User_credential"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User informations after succesful log in",
+            "content": {
+              "application/json":   { 
+                "schema": {
+                      "$ref": "#/components/schemas/Authorization"
+                    }
+                }
+              }
+
+            },
+          "401": {
+            "description": "Invalid credential"
+          }
+        }
+      }
+    },
+        "/device/{e-nno_serial}": {
+      "get": {
+        "tags": [
+        "Devices"
+        ],
+        "summary": "Device datas by serial",
+        "description": "Returns device's historical data",
+        "operationId": "getDeviceData",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's access token",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
+            }
+          },
+
+          {
+            "name": "serial",
+            "in": "path",
+            "description": "E-nno Box serial",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "2019.09.01.001"
+            }
+          }
+
+        ],
+        "requestBody": {
+          "description": "Device params",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device_params"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "All device data for a given period",
+            "content": {
+              "application/json":   { 
+                "schema": {
+                      "$ref": "#/components/schemas/Historical_data"
+                    }
+                }
+              }
+
+            },
+          "401": {
+            "description": "Invalid credential"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User_credential": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "example@company.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "1234"
+          }
+        }
+      },
+      "Device_params": {
+        "type": "object",
+        "required":false,
+        "properties": {
+        "startDate":{
+          "type": "string",
+          "description": "Start Date Interval",
+          "example": "2020-08-05 22:00:00"
+
+        },
+        "endDate":{
+          "type": "string",
+          "description": "Start Date Interval",
+          "example": "2020-08-06 22:00:00"
+
+        }
+      }
+    },
+    "Authorization": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "Access token used to authorize the user",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
+        }
+      }
+    },
+    "Historical_data": {
+      "type": "object",
+      "properties": {
+        "GH": {
+          "type": "array",
+          "description": "Hydraulic Group data",
+          "example": [
+            {
+                "id": 1527,
+                "tmp": "2020-08-05T22:00:00.000Z",
+                "cmd_id": 51,
+                "value": 21.29,
+                "cmd_name": "Backward Temperature",
+                "enno_serial": "2019.09.01.002-GH-A",
+                "device_name": "Enno Hydraulic Unit",
+                "createdAt": "2020-10-14T10:39:55.607Z",
+                "updatedAt": "2020-10-14T10:39:55.613Z"
+            }
+          ]
+      },
+      "PULSE": {
+        "type": "array",
+        "description": "Consumption data",
+        "example": [
+          {
+            "id": 87,
+            "tmp": "2020-08-05T22:00:00.000Z",
+            "cmd_id": 162,
+            "value": 0.11,
+            "cmd_name": "Pulse",
+            "enno_serial": "2019.09.01.002-Pulse",
+            "device_name": "GPIO Cyble",
+            "createdAt": "2020-10-13T22:15:26.768Z",
+            "updatedAt": "2020-10-13T22:15:26.776Z"
+        }
+        ]
+    },
+    "METEO": {
+      "type": "array",
+      "description": "Meteo data",
+      "example": [
+        {
+          "id": 966,
+          "tmp": "2020-08-05T22:00:00.000Z",
+          "cmd_id": 78,
+          "value": 17.4,
+          "cmd_name": "tt_airTemperature_degrec",
+          "device_name": "Meteo Norm",
+          "key": "meteonorm/:311309",
+          "createdAt": "2020-10-14T11:15:10.878Z",
+          "updatedAt": "2020-10-14T11:15:10.882Z"
+      }
+      ]
+  },
+  "STATIC": {
+    "type": "array",
+    "description": "Building static datas",
+    "example": [
+      {
+        "adresse": "Ch. de la Tour-de-Champel 4, 1206 Genève",
+        "SRE": 1661,
+        "affectation": "1 - Habitat Collectif",
+        "client": "Propriétaire 1",
+        "gerance": "Régis A",
+        "manager": "Chauffagiste A"
+    }
+    ]
+}
+  }
+  }
+
+
+  }
+}
+
+}
