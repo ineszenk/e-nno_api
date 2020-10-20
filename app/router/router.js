@@ -19,6 +19,7 @@ module.exports = function(app) {
     swaggerUi.setup(swaggerDocument, swaggerOptions)
   );
 
+  // Sign up route
   app.post(
     "/api/auth/signup",
     [
@@ -28,14 +29,17 @@ module.exports = function(app) {
     controller.signup
   );
 
+  // Login route
   app.post("/api/auth/signin", controller.signin);
 
+  // Admin authentification and authorization
   app.get(
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
 
+  // Get E-nno box data
   app.get(
     "/api/gh/:enno_serial",
     [authJwt.verifyToken],

@@ -10,13 +10,6 @@ const sequelize = new Sequelize(
     host: process.env.HOST,
     dialect: "postgres",
     operatorsAliases: false
-
-    // pool: {
-    //   max: env.max,
-    //   min: env.pool.min,
-    //   acquire: env.pool.acquire,
-    //   idle: env.pool.idle
-    // }
   }
 );
 
@@ -43,12 +36,6 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId"
 });
 
-// var connectionString = `postgres://${process.env.STATIC_USERNAME}:${process.env.STATIC_PASSWORD}@${process.env.STATIC_ENV}:5432/${process.env.STATIC_DATABASE}`;
-// const static_db = new pg.Client({
-//   connectionString: connectionString
-// });
-// static_db.connect;
-
 const pgp = require("pg-promise")(/* initialization options */);
 
 const cn = {
@@ -59,11 +46,6 @@ const cn = {
   password: process.env.STATIC_PASSWORD
 };
 
-// alternative:
-// var cn = 'postgres://username:password@host:port/database';
-
 const static_db = pgp(cn); // database instance;
-
-// select and return a single user name from id:
 
 module.exports = { db, static_db };
