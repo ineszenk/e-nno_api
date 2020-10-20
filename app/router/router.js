@@ -30,7 +30,7 @@ module.exports = function(app) {
   );
 
   // Login route
-  app.post("/api/auth/signin", controller.signin);
+  app.post("/user/login", controller.signin);
 
   // Admin authentification and authorization
   app.get(
@@ -41,7 +41,7 @@ module.exports = function(app) {
 
   // Get E-nno box data
   app.get(
-    "/api/gh/:enno_serial",
+    "/device/:enno_serial",
     [authJwt.verifyToken],
     controller.HydrauliqueGroup
   );
