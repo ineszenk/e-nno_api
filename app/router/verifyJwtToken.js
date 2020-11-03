@@ -5,12 +5,10 @@ const Role = db.role;
 const User = db.user;
 
 verifyToken = (req, res, next) => {
-  let token = req.headers["Authorization"];
+  let token = req.headers["x-access-token"] || req.headers["authorization"];
 
-  if (token.startsWith("Bearer ")) {
-    // Remove Bearer from string
-    token = token.slice(7, token.length);
-  }
+  // Remove Bearer from string
+  token = token.slice(7, token.length);
 
   if (!token) {
     return res.status(403).send({
