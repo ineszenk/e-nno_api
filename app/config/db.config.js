@@ -13,6 +13,8 @@ const sequelize = new Sequelize(
   }
 );
 
+// sequelize.sync();
+
 const db = {};
 
 db.Sequelize = Sequelize;

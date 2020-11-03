@@ -10,7 +10,6 @@ const Meteo = db.meteo;
 const Op = db.Sequelize.Op;
 
 var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -20,24 +19,10 @@ exports.signup = (req, res) => {
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: req.body.password
   })
-    .then(user => {
-      Role.findAll({
-        where: {
-          name: {
-            [Op.or]: req.body.roles.map(role => role.toUpperCase())
-          }
-        }
-      })
-        .then(roles => {
-          user.addRoles(roles).then(() => {
-            res.send("User registered successfully!");
-          });
-        })
-        .catch(err => {
-          res.status(500).send("Error -> " + err);
-        });
+    .then(() => {
+      res.send("User registered successfully!");
     })
     .catch(err => {
       res.status(500).send("Fail! Error -> " + err);
@@ -47,21 +32,25 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   console.log("Sign-In");
 
+  const password = req.body.password;
+  const username = req.body.username;
+
   User.findOne({
     where: {
-      username: req.body.username
+      username: username
     }
   })
-    .then(user => {
+    .then(async user => {
+      // Get hashed password
+      const hash = user["dataValues"].password;
+
+      // Compared with password entered by the user
+      const comparaison = await user["_modelOptions"][
+        "instanceMethods"
+      ].validPassword(password, hash);
       if (!user) {
         return res.status(404).send("User Not Found.");
-      }
-
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
-      if (!passwordIsValid) {
+      } else if (!comparaison) {
         return res.status(401).send({
           auth: false,
           accessToken: null,
@@ -258,7 +247,6 @@ exports.HydrauliqueGroup = async (req, res, next) => {
 
 exports.Meteo = async (req, res, next) => {
   const { startDate, endDate } = req.body;
-  console.log(req.params);
 
   try {
     const meteo = await Meteo.findAll({

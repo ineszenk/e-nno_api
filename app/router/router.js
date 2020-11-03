@@ -32,6 +32,8 @@ module.exports = function(app) {
   // Login route
   app.post("/user/login", controller.signin);
 
+  // app.post("/user/signup", controller.signup);
+
   // Admin authentification and authorization
   app.get(
     "/api/test/admin",
