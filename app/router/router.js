@@ -10,7 +10,11 @@ const swaggerOptions = {
 };
 
 module.exports = function(app) {
-  const controller = require("../controller/controller.js");
+  const authController = require("../controller/authController.js");
+  const staticController = require("../controller/staticController.js");
+  const hydraulicController = require("../controller/hydraulicController.js");
+  const consumptionController = require("../controller/consumptionController.js");
+  const metoeController = require("../controller/meteoController.js");
 
   // Swagger documentation
   app.use(
@@ -26,27 +30,62 @@ module.exports = function(app) {
       verifySignUp.checkDuplicateUserNameOrEmail,
       verifySignUp.checkRolesExisted
     ],
-    controller.signup
+    authController.signup
   );
 
   // Login route
-  app.post("/user/login", controller.signin);
-
-  // app.post("/user/signup", controller.signup);
+  app.post("/user/login", authController.signin);
 
   // Admin authentification and authorization
   app.get(
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
+    authController.adminBoard
   );
 
-  // Get E-nno box data
+  // Get Meteo data for a given period
   app.get(
-    "/device/:enno_serial",
+    "/meteo/:enno_serial/:startDate/:endDate",
     [authJwt.verifyToken],
-    controller.HydrauliqueGroup
+    metoeController.Meteo
   );
 
-  app.get("/api/meteo/:key", [authJwt.verifyToken], controller.Meteo);
+  // Get Meteo data for the last 24h
+  app.get(
+    "/meteo/:enno_serial",
+    [authJwt.verifyToken],
+    metoeController.MeteoLast
+  );
+
+  // Get Hydraulic Group data
+  app.get(
+    "/hydraulic_group/:enno_serial/:startDate/:endDate",
+    [authJwt.verifyToken],
+    hydraulicController.HydrauliqueGroup
+  );
+
+  // Get Hydraulic Group data for the last 24h
+  app.get(
+    "/hydraulic_group/:enno_serial",
+    [authJwt.verifyToken],
+    hydraulicController.HydrauliqueGroupLast
+  );
+
+  app.get(
+    "/consumption/:enno_serial/:startDate/:endDate",
+    [authJwt.verifyToken],
+    consumptionController.Consumption
+  );
+
+  app.get(
+    "/consumption/:enno_serial",
+    [authJwt.verifyToken],
+    consumptionController.ConsumptionLast
+  );
+
+  app.get(
+    "/static/:enno_serial",
+    [authJwt.verifyToken],
+    staticController.static
+  );
 };
