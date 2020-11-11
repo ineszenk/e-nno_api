@@ -27,6 +27,7 @@ exports.Consumption = async (req, res, next) => {
         where: {
           enno_serial: {
             [Op.or]: [
+              enno_serial,
               `${enno_serial}-Pulse`,
               `${enno_serial}-Pulse1`,
               `${enno_serial}-Pulse2`,
@@ -122,6 +123,7 @@ exports.ConsumptionLast = async (req, res, next) => {
         where: {
           enno_serial: {
             [Op.or]: [
+              enno_serial,
               `${enno_serial}-Pulse`,
               `${enno_serial}-Pulse1`,
               `${enno_serial}-Pulse2`,
