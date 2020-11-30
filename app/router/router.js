@@ -15,6 +15,8 @@ module.exports = function(app) {
   const hydraulicController = require("../controller/hydraulicController.js");
   const consumptionController = require("../controller/consumptionController.js");
   const metoeController = require("../controller/meteoController.js");
+  const kpiController = require("../controller/kpiController.js");
+  const graphicsController = require("../controller/graphicsController.js");
 
   // Swagger documentation
   app.use(
@@ -88,4 +90,8 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     staticController.static
   );
+
+  app.get("/kpi/:key", [authJwt.verifyToken], kpiController.Kpi);
+
+  app.get("/graphics/:key", [authJwt.verifyToken], graphicsController.Graphics);
 };
