@@ -29,7 +29,32 @@ module.exports = function(sequelize, Sequelize) {
     emulator_serial: {
       type: Sequelize.BOOLEAN,
       allowNull: true
-    }
+    },
+    energy_savings: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    performance: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    intercept_ref: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    slope_ref: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    intercept_opti: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    slope_opti: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    last_updated: { type: Sequelize.DATE, allowNull: true }
   });
   return Kpi;
 };

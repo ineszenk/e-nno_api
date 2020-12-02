@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "E-nno Intern API",
-    "description": "This API allows to retrieve E-nno's device historical data",
+    "title": "E-nno Energy Dashboard API",
+    "description": "This API allows to retrieve E-nno's device data for the energy dashboard",
     "contact": {
       "email": "support@e-nno.ch"
     },
@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://e-nno_api/",
+      "url": "https://enno-api.herokuapp.com/",
       "description": "Production"
     }
   ],
@@ -20,9 +20,14 @@
       "description": "Users Sign in"
     },
     {
-      "name": "Devices",
-      "description": "Devices historical retrieval"
+      "name": "KPIs",
+      "description": "KPIs data retrieval"
+    },
+    {
+      "name": "Graphics",
+      "description": "Graphics data retrieval"
     }
+
   ],
   "paths": {
     "/user/login": {
@@ -61,14 +66,67 @@
           }
         }
       }
-    },
-        "/device/{e-nno_serial}": {
+    },    "/graphics/{key}": {
       "get": {
         "tags": [
-        "Devices"
+        "Graphics"
         ],
-        "summary": "Device datas by serial",
-        "description": "Returns device's historical data",
+        "summary": "Graphic's data retrieval",
+        "description": "Returns graphic's data",
+        "operationId": "getGraphicsData",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's access token",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
+            }
+          },
+
+          {
+            "name": "key",
+            "in": "path",
+            "description": "Device key",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "ab57a087-7f6a-4303-9673-b3ad33497cfe"
+            }
+          }
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Graphics data updated every 24h",
+            "content": {
+              "application/json":   { 
+                "schema": {
+                      "$ref": "#/components/schemas/Graphics"
+                    }
+                }
+              }
+
+            },
+          "401": {
+            "description": "Invalid credential"
+          }
+        }
+      }
+    },
+        "/kpi/{key}": {
+      "get": {
+        "tags": [
+        "KPIs"
+        ],
+        "summary": "Device KPIs",
+        "description": "Returns device's KPIs",
         "operationId": "getDeviceData",
         "parameters": [
           {
@@ -85,37 +143,26 @@
           },
 
           {
-            "name": "serial",
+            "name": "key",
             "in": "path",
-            "description": "E-nno Box serial",
+            "description": "Device key",
             "required": true,
             "style": "simple",
             "explode": false,
             "schema": {
               "type": "string",
-              "example": "2019.09.01.001"
+              "example": "ab57a087-7f6a-4303-9673-b3ad33497cfe"
             }
           }
 
         ],
-        "requestBody": {
-          "description": "Device params",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Device_params"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "200": {
-            "description": "All device data for a given period",
+            "description": "KPI updated every 24h",
             "content": {
               "application/json":   { 
                 "schema": {
-                      "$ref": "#/components/schemas/Historical_data"
+                      "$ref": "#/components/schemas/KPI"
                     }
                 }
               }
@@ -147,24 +194,6 @@
           }
         }
       },
-      "Device_params": {
-        "type": "object",
-        "required":false,
-        "properties": {
-        "startDate":{
-          "type": "string",
-          "description": "Start Date Interval",
-          "example": "2020-08-05 22:00:00"
-
-        },
-        "endDate":{
-          "type": "string",
-          "description": "Start Date Interval",
-          "example": "2020-08-06 22:00:00"
-
-        }
-      }
-    },
     "Authorization": {
       "type": "object",
       "properties": {
@@ -175,79 +204,128 @@
         }
       }
     },
-    "Historical_data": {
+    "KPI": {
       "type": "object",
       "properties": {
-        "GH": {
-          "type": "array",
-          "description": "Hydraulic Group data",
-          "example": [
-            {
-                "id": 1527,
-                "tmp": "2020-08-05T22:00:00.000Z",
-                "cmd_id": 51,
-                "value": 21.29,
-                "cmd_name": "Backward Temperature",
-                "enno_serial": "2019.09.01.002-GH-A",
-                "device_name": "Enno Hydraulic Unit",
-                "createdAt": "2020-10-14T10:39:55.607Z",
-                "updatedAt": "2020-10-14T10:39:55.613Z"
-            }
-          ]
+        "description": {
+          "type": "string",
+          "example": "KPIs data"
+        },
+        "cum_conso_pred":{
+          "type": "float",
+          "example":5063.5,
+          "description":"Cumulated consumption predicted in kWh"
+        },
+        "cum_conso_measured":{
+          "type": "float",
+          "example":5465.5,
+          "description":"Cumulated consumption measured in kWh"
+
+        },
+        "co2_savings":{
+          "type": "float",
+          "example":14.5,
+          "description":"Cumulated Co2 savings in TCO2"
+
+        },
+        "financial_savings":{
+          "type": "float",
+          "example":1.4,
+          "description":"Cumulated Financial savings in kCHF"
+        },
+        "energy_savings":{
+          "type": "float",
+          "example":1.4,
+          "description":"Cumulated Energy savings in kWh"
+        },
+        "idc":{
+          "type":"integer",
+          "example": 579 ,
+          "description":"Cumulated IDC reduction in MJ/m2"
+        },
+        "performance":{
+          "type": "float",
+          "example":0.10,
+          "description":"Cumulated energy savings Perfomance(%)"
+        },
+        "slope_ref":{
+          "type": "float",
+          "example":-11.18,
+          "description":"Slope to plot reference regression"
+        },
+        "intercept_ref":{
+          "type": "float",
+          "example":323.02,
+          "description":"Intercept to plot reference regression"
+        },
+        "slope_opti":{
+          "type": "float",
+          "example":-11.18,
+          "description":"Slope to plot opti regression"
+        },
+        "intercept_opti":{
+          "type": "float",
+          "example":323.02,
+          "description":"Intercept to plot opti regression"
+        },
+      "emulator_serial":{
+        "type":"string",
+        "example": "2020.11.30.001"
       },
-      "PULSE": {
-        "type": "array",
-        "description": "Consumption data",
-        "example": [
-          {
-            "id": 87,
-            "tmp": "2020-08-05T22:00:00.000Z",
-            "cmd_id": 162,
-            "value": 0.11,
-            "cmd_name": "Pulse",
-            "enno_serial": "2019.09.01.002-Pulse",
-            "device_name": "GPIO Cyble",
-            "createdAt": "2020-10-13T22:15:26.768Z",
-            "updatedAt": "2020-10-13T22:15:26.776Z"
-        }
-        ]
-    },
-    "METEO": {
-      "type": "array",
-      "description": "Meteo data",
-      "example": [
-        {
-          "id": 966,
-          "tmp": "2020-08-05T22:00:00.000Z",
-          "cmd_id": 78,
-          "value": 17.4,
-          "cmd_name": "tt_airTemperature_degrec",
-          "device_name": "Meteo Norm",
-          "key": "meteonorm/:311309",
-          "createdAt": "2020-10-14T11:15:10.878Z",
-          "updatedAt": "2020-10-14T11:15:10.882Z"
+      "opti":{
+        "type": "boolean",
+        "example":true,
+        "description": "Optimisation state"
+      },
+      "last_updated":{
+        "type": "datetime",
+        "example":"2020-12-01 00:00:00",
+        "description": "Last data update"
       }
-      ]
-  },
-  "STATIC": {
-    "type": "array",
-    "description": "Building static datas",
-    "example": [
-      {
-        "adresse": "Ch. de la Tour-de-Champel 4, 1206 Genève",
-        "SRE": 1661,
-        "affectation": "1 - Habitat Collectif",
-        "client": "Propriétaire 1",
-        "gerance": "Régis A",
-        "manager": "Chauffagiste A"
-    }
-    ]
+        }
+      },
+      "Graphics": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Graphic's data"
+          },
+          "tmp":{
+            "type": "datetime",
+            "example":"2020-12-01 00:00:00",
+            "description":"Data timestamp"
+    
+          },
+
+          "tt":{
+            "type": "float",
+            "example":78,
+            "description":"Consumption measured (kWh) in the last 24h"
+    
+          },
+          "conso_pred":{
+            "type": "float",
+            "example":65.5,
+            "description":"Consumption predicted (kWh) in the last 24h"
+    
+          },
+          "conso_measured":{
+            "type": "float",
+            "example":62.5,
+            "description":"Consumption measured (kWh) in the last 24h"
+          },
+          "opti":{
+            "type": "boolean",
+            "example":true,
+            "description": "Optimisation state"
+          },
+        "emulator_serial":{
+          "type":"string",
+          "example": "2020.11.30.001"
+        }
+  }
 }
-  }
-  }
-
-
-  }
 }
-
+}
 }
