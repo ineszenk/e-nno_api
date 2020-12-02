@@ -56,11 +56,11 @@ exports.Consumption = async (req, res, next) => {
 
       res.status(200).json({
         description: "Consumption data (Kwh)",
-        Pulse: pulse_parsed
+        Consumption: pulse_parsed
       });
     } catch (error) {
       res.status(500).json({
-        description: "Can not access Consommation Data",
+        description: "Can not access Consumption Data",
         error: error
       });
     }
@@ -91,7 +91,7 @@ exports.Consumption = async (req, res, next) => {
 
       res.status(200).json({
         description: "Consumption data (Kwh)",
-        Consommation: ftp_parsed
+        Consumption: ftp_parsed
       });
     } catch {
       res.status(500).json({
@@ -193,7 +193,7 @@ exports.ConsumptionLast = async (req, res, next) => {
 
       res.status(200).json({
         description: "Consumption data (Kwh)",
-        Consommation: ftp_last_parsed
+        Consumption: ftp_last_parsed
       });
     } catch {
       res.status(500).json({
