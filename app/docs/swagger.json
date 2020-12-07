@@ -76,7 +76,7 @@
         "operationId": "getGraphicsData",
         "parameters": [
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "User's access token",
             "required": true,
@@ -84,7 +84,7 @@
             "explode": false,
             "schema": {
               "type": "string",
-              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
             }
           },
 
@@ -130,7 +130,7 @@
         "operationId": "getDeviceData",
         "parameters": [
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "User's access token",
             "required": true,
@@ -138,7 +138,7 @@
             "explode": false,
             "schema": {
               "type": "string",
-              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
             }
           },
 
