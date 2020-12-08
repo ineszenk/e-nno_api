@@ -2,6 +2,12 @@
 
 module.exports = function(sequelize, Sequelize) {
   const Ftp = sequelize.define("ftp_conso", {
+    id: {
+      autoIncrement: true,
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     tmp: {
       type: Sequelize.DATE,
       allowNull: true

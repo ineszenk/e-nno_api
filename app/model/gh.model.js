@@ -2,6 +2,12 @@
 
 module.exports = function(sequelize, Sequelize) {
   const Gh = sequelize.define("hydraulic_group", {
+    id: {
+      autoIncrement: true,
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     tmp: {
       type: Sequelize.DATE,
       allowNull: true

@@ -1,7 +1,13 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, Sequelize) {
-  const Kpi = sequelize.define("KPIs", {
+  const Kpi = sequelize.define("kpis", {
+    id: {
+      autoIncrement: true,
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     cum_conso_pred: {
       type: Sequelize.FLOAT,
       allowNull: true

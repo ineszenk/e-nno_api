@@ -2,6 +2,12 @@
 
 module.exports = function(sequelize, Sequelize) {
   const Graphics = sequelize.define("graphics", {
+    id: {
+      autoIncrement: true,
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     tmp: {
       type: Sequelize.DATE,
       allowNull: false
