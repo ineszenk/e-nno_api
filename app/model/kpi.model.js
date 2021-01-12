@@ -60,7 +60,19 @@ module.exports = function(sequelize, Sequelize) {
       type: Sequelize.FLOAT,
       allowNull: true
     },
-    last_updated: { type: Sequelize.DATE, allowNull: true }
+    last_updated: { type: Sequelize.DATE, allowNull: true },
+    start_optimisation_period: {
+      type: Sequelize.DATE,
+      allowNull: true
+    },
+    id_icon: {
+      type: Sequelize.INTEGER,
+      allowNull: true
+    },
+    forecasted_mean_tt: {
+      type: Sequelize.INTEGER,
+      allowNull: true
+    }
   });
   return Kpi;
 };
