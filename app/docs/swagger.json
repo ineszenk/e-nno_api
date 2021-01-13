@@ -281,6 +281,21 @@
         "type": "datetime",
         "example":"2020-12-01 00:00:00",
         "description": "Last data update"
+      },
+      "start_optimisation_period":{
+        "type": "datetime",
+        "example":"2020-11-01 00:00:00",
+        "description": "Optimisation start date"
+      },
+      "id_icon":{
+        "type": "integer",
+        "example":"2",
+        "description": "Meteo icon id"
+      },
+      "forecasted_mean_tt":{
+        "type": "integer",
+        "example":"10",
+        "description": "Mean t° forecasted"
       }
         }
       },
