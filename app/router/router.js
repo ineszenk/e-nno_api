@@ -82,11 +82,7 @@ module.exports = function(app) {
     consumptionController.ConsumptionLast
   );
 
-  app.get(
-    "/static/:enno_serial",
-    [authJwt.verifyToken],
-    staticController.static
-  );
+  app.get("/static/:key", [authJwt.verifyToken], staticController.static);
 
   app.get("/kpi/:key", [authJwt.verifyToken], kpiController.Kpi);
 

@@ -26,6 +26,10 @@
     {
       "name": "Graphics",
       "description": "Graphics data retrieval"
+    },
+    {
+      "name": "Informations",
+      "description": "Static data retrieval"
     }
 
   ],
@@ -163,6 +167,60 @@
               "application/json":   { 
                 "schema": {
                       "$ref": "#/components/schemas/KPI"
+                    }
+                }
+              }
+
+            },
+          "401": {
+            "description": "Invalid credential"
+          }
+        }
+      }
+    },
+    "/static/{key}": {
+      "get": {
+        "tags": [
+        "Informations"
+        ],
+        "summary": "Device informations",
+        "description": "Returns device's static informations",
+        "operationId": "getStaticData",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "User's access token",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
+            }
+          },
+
+          {
+            "name": "key",
+            "in": "path",
+            "description": "Device key",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "ab57a087-7f6a-4303-9673-b3ad33497cfe"
+            }
+          }
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Device Information data",
+            "content": {
+              "application/json":   { 
+                "schema": {
+                      "$ref": "#/components/schemas/Informations"
                     }
                 }
               }
@@ -340,7 +398,52 @@
           "example": "2020.11.30.001"
         }
   }
+},
+"Informations":{
+  "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Device static data"
+          },
+          "emulator_serial":{
+            "type":"string",
+            "example":"2020.11.30.001"
+          },
+          "adresse":{
+            "type":"string",
+            "example":"Chemin de la tour de Champel 4"
+          },
+          "npa":{
+            "type":"integer",
+            "example":"1204"
+          },
+          "commune":{
+            "type":"string",
+            "example":"Genève"
+          },
+          "agent_energetique":{
+            "type":"string",
+            "example":"Gaz"
+          },
+          "affectation":{
+            "type":"string",
+            "example":"Habitat Collectif"
+          },
+          "client":{
+            "type":"string",
+            "example":"Client A"
+          },
+          "gerance":{
+            "type":"string",
+            "example":"Regis A SA"
+          },
+          "manager":{
+            "type":"string",
+            "example":"Chauffagiste A"
+          }
+
 }
 }
-}
+}}
 }
