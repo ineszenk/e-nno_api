@@ -127,7 +127,8 @@ exports.ConsumptionLast = async (req, res, next) => {
               `${enno_serial}-Pulse`,
               `${enno_serial}-Pulse1`,
               `${enno_serial}-Pulse2`,
-              `${enno_serial}-Pulse3`
+              `${enno_serial}-Pulse3`,
+              `${enno_serial}-Mbus `
             ]
           },
           [Op.or]: [
