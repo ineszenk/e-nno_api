@@ -422,6 +422,14 @@
             "type":"string",
             "example":"Genève"
           },
+          "latitude":{
+            "type":"decimal",
+            "example":"46.189734"
+          },
+          "longitude":{
+            "type":"decimal",
+            "example":"6.155010"
+          },
           "agent_energetique":{
             "type":"string",
             "example":"Gaz"

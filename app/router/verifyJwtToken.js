@@ -5,7 +5,10 @@ const Role = db.role;
 const User = db.user;
 
 verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"] || req.headers["authorization"];
+  console.log(req.headers["access-token"]);
+  let token = req.headers["access-token"];
+
+  console.log("token", token);
 
   // Remove Bearer from string
   token = token.slice(7, token.length);
@@ -18,6 +21,9 @@ verifyToken = (req, res, next) => {
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
+    console.log(token);
+    console.log(config.secret);
+
     if (err) {
       return res.status(500).send({
         auth: false,

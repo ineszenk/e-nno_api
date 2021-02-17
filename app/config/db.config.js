@@ -13,7 +13,7 @@ const sequelize = new Sequelize(
   }
 );
 
-// sequelize.sync();
+sequelize.sync();
 
 const db = {};
 
@@ -28,6 +28,8 @@ db.pulse = require("../model/pulse.model.js")(sequelize, Sequelize);
 db.gh = require("../model/gh.model.js")(sequelize, Sequelize);
 db.kpi = require("../model/kpi.model.js")(sequelize, Sequelize);
 db.graphics = require("../model/graphics.model.js")(sequelize, Sequelize);
+db.conso = require("../model/conso_brut.model.js")(sequelize, Sequelize);
+db.kwh_conso = require("../model/kwh_conso.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",

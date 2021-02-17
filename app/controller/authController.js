@@ -24,6 +24,7 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
   console.log("Sign-In");
+  console.log(req.body);
 
   const password = req.body.password;
   const username = req.body.username;
@@ -34,6 +35,7 @@ exports.signin = (req, res) => {
     }
   })
     .then(async user => {
+      console.log("USER", user);
       // Get hashed password
       const hash = user["dataValues"].password;
 
