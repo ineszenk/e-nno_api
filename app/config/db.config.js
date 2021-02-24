@@ -9,7 +9,11 @@ const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     dialect: "postgres",
-    operatorsAliases: false
+    operatorsAliases: false,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   }
 );
 
