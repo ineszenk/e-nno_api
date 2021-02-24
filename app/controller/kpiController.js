@@ -35,9 +35,9 @@ exports.Kpi = async (req, res) => {
       id_icon: kpi[0].id_icon
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
-      description: "KPIs data not available"
+      description: "KPIs data not available",
+      error: error
     });
   }
 };

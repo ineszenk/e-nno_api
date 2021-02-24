@@ -27,9 +27,9 @@ exports.Graphics = async (req, res) => {
       emulator_serial: graphics[0].emulator_serial
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
-      description: "Data not available"
+      description: "Data not available",
+      error: error
     });
   }
 };
