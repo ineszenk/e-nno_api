@@ -19,7 +19,7 @@ exports.Consumption = async (req, res, next) => {
 
   const type_comptage = conso_config[0][0].type_comptage;
 
-  if (type_comptage === "Pulse") {
+  if (type_comptage === "Pulse" || type_comptage === "MBUS") {
     try {
       // GET PULSE CONSO DATA FROM DS DATABASE
 
@@ -29,9 +29,12 @@ exports.Consumption = async (req, res, next) => {
             [Op.or]: [
               enno_serial,
               `${enno_serial}-Pulse`,
+              `${enno_serial}-Pulse `,
               `${enno_serial}-Pulse1`,
               `${enno_serial}-Pulse2`,
-              `${enno_serial}-Pulse3`
+              `${enno_serial}-Pulse3`,
+              `${enno_serial}-Mbus `,
+              `${enno_serial}-Mbus`
             ]
           },
           [Op.or]: [
@@ -53,6 +56,8 @@ exports.Consumption = async (req, res, next) => {
           cmd_name: el.cmd_name
         })
       );
+
+      console.log(pulse_parsed);
 
       res.status(200).json({
         description: "Consumption data (Kwh)",
@@ -116,7 +121,7 @@ exports.ConsumptionLast = async (req, res, next) => {
 
   const type_comptage = conso_config[0][0].type_comptage;
 
-  if (type_comptage === "Pulse") {
+  if (type_comptage === "Pulse" || type_comptage === "Pulse") {
     try {
       // GET PULSE CONSO DATA FROM DS DATABASE
       const pulse_last = await Pulse.findAll({
@@ -125,10 +130,12 @@ exports.ConsumptionLast = async (req, res, next) => {
             [Op.or]: [
               enno_serial,
               `${enno_serial}-Pulse`,
+              `${enno_serial}-Pulse `,
               `${enno_serial}-Pulse1`,
               `${enno_serial}-Pulse2`,
               `${enno_serial}-Pulse3`,
-              `${enno_serial}-Mbus `
+              `${enno_serial}-Mbus `,
+              `${enno_serial}-Mbus`
             ]
           },
           [Op.or]: [

@@ -426,6 +426,14 @@
             "type":"string",
             "example":"Gaz"
           },
+          "latitude":{
+            "type":"decimal",
+            "example":"46.189734"
+          },
+          "longitude":{
+            "type":"decimal",
+            "example":"6.155010"
+          },
           "affectation":{
             "type":"string",
             "example":"Habitat Collectif"

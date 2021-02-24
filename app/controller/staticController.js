@@ -33,6 +33,8 @@ exports.static = async (req, res) => {
       adresse: geo_config[0][0].adresse,
       npa: geo_config[0][0].npa,
       commune: geo_config[0][0].commune,
+      latitude: geo_config[0][0].latitude,
+      longitude: geo_config[0][0].longitude,
       agent_energetique: chaudiere_config[0][0].agent_energetique,
       affectation: archi_config[0][0].affectation,
       client: admin[0][0].client,
