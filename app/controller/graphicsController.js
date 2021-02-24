@@ -12,11 +12,13 @@ exports.Graphics = async (req, res) => {
     );
     console.log("EMULATOR SERIAL", building_emulator);
 
-    const graphics = await dynamic_graphics.findAll({
+    const graphics = await dynamic_graphics.findOne({
       where: {
         emulator_serial: building_emulator[0][0].emulator_serial
       }
     });
+
+    console.log("GRAPHICS", graphics);
 
     res.status(200).json({
       description: "Graphics",

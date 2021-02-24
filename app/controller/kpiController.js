@@ -11,11 +11,12 @@ exports.Kpi = async (req, res) => {
       `SELECT emulator_serial FROM buildings where key = '${key}'`
     );
     console.log("EMULATOR SERIAL", building_emulator);
-    const kpi = await static_kpi.findAll({
+    const kpi = await static_kpi.findOne({
       where: {
         emulator_serial: building_emulator[0][0].emulator_serial
       }
     });
+    console.log("KPIS", kpi);
     res.status(200).json({
       description: "KPIs",
       emulator_serial: kpi[0].emulator_serial,
