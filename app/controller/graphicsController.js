@@ -7,9 +7,22 @@ exports.Graphics = async (req, res) => {
 
   try {
     // GET GRAPHICS DATA
-    const building_emulator = await static_db.multi(
-      `SELECT emulator_serial FROM buildings where key = '${key}'`
-    );
+    // const building_emulator = await static_db.multi(
+    //   `SELECT emulator_serial FROM buildings where key = '${key}'`
+
+    // );
+
+    const building_emulator = new Promise((resolve, reject) => {
+      resolve(await static_db.multi(
+      `SELECT emulator_serial FROM buildings where key = '${key}'`);
+    });
+    
+
+    promise1.then((value) => {
+      console.log(value);
+      // expected output: "Success!"
+    });
+    
     console.log("EMULATOR SERIAL", building_emulator);
 
     const graphics = await dynamic_graphics.findAll({

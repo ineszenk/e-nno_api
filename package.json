@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "heroku-postbuild": "npm install"
   },
   "keywords": [
     "Nodejs",
@@ -30,6 +31,7 @@
     "sequelize-auto": "^0.6.3",
     "swagger-jsdoc": "^4.3.0",
     "swagger-ui-express": "^4.1.4",
-    "volleyball": "^1.5.1"
+    "volleyball": "^1.5.1",
+    "nodemon": "^2.0.2"
   }
 }
