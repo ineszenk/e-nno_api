@@ -18,15 +18,18 @@ exports.Graphics = async (req, res) => {
         emulator_serial: building_emulator[0][0].emulator_serial
       }
     });
+    console.log("GRAPHICS", graphics);
 
-    res.status(200).json({
+    const response = {
       description: "Graphics",
       tt: graphics[0].tt,
       conso_pred: graphics[0].conso_pred,
       conso_measured: graphics[0].conso_measured,
       opti: graphics[0].opti,
       emulator_serial: graphics[0].emulator_serial
-    });
+    };
+
+    res.status(200).send(response);
   } catch (error) {
     console.log(error);
     res.status(500).json({
