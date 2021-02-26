@@ -14,17 +14,13 @@ const sequelize = new Sequelize(
 );
 
 const sequelize_connection = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
+  await sequelize.authenticate();
+  console.log("Connection has been established successfully.");
 };
 
-sequelize_connection();
+// sequelize_connection();
 
-sequelize.sync();
+// sequelize.sync();
 
 const db = {};
 
@@ -65,4 +61,4 @@ const cn = {
 
 const static_db = pgp(cn); // database instance;
 
-module.exports = { db, static_db };
+module.exports = { db, static_db, sequelize_connection };
