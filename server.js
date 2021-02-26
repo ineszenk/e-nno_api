@@ -11,5 +11,5 @@ sequelize_connection()
     });
   })
   .catch(error => {
-    console.error(error);
+    console.log(error);
   });
