@@ -14,16 +14,21 @@ const sequelize = new Sequelize(
 );
 
 const sequelize_connection = async () => {
-  console.log(
-    `TESTING CONNECTION TO DB
-    database : ${process.env.DATABASE}
-    username : ${process.env.USERNAME.substring(0, 1)}...
-    password :${process.env.PASSWORD.substring(0, 1)}...
-    host: ${process.env.HOST}
-    `
-  );
-  await sequelize.authenticate();
-  console.log("Connection has been established successfully.");
+  try {
+    console.log(
+      `TESTING CONNECTION TO DB
+      database : ${process.env.DATABASE}
+      username : ${process.env.USERNAME.substring(0, 1)}...
+      password :${process.env.PASSWORD.substring(0, 1)}...
+      host: ${process.env.HOST}
+      `
+    );
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error(error);
+    throw new Error("DB connection error");
+  }
 };
 
 // sequelize_connection();
