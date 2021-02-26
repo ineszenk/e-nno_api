@@ -1,6 +1,8 @@
 require("dotenv").config();
 
 const pg = require("pg");
+const logger = require("../logger.js");
+
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
   process.env.DATABASE,
@@ -8,8 +10,7 @@ const sequelize = new Sequelize(
   process.env.PASSWORD,
   {
     host: process.env.HOST,
-    dialect: "postgres",
-    operatorsAliases: false
+    dialect: "postgres"
   }
 );
 
@@ -26,6 +27,8 @@ const sequelize_connection = async () => {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
   } catch (error) {
+    logger.error("ERROR", { catch_error: error });
+
     console.log(error);
     throw new Error("DB connection error");
   }
