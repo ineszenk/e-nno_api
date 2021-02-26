@@ -18,7 +18,7 @@ const sequelize = new Sequelize(
 const db = {};
 
 db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+// db.sequelize = sequelize;
 
 db.user = require("../model/user.model.js")(sequelize, Sequelize);
 db.role = require("../model/role.model.js")(sequelize, Sequelize);

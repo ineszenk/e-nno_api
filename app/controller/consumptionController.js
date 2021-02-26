@@ -34,7 +34,8 @@ exports.Consumption = async (req, res, next) => {
               `${enno_serial}-Pulse2`,
               `${enno_serial}-Pulse3`,
               `${enno_serial}-Mbus `,
-              `${enno_serial}-Mbus`
+              `${enno_serial}-Mbus`,
+              "2020-05-10-001-Mbus "
             ]
           },
           [Op.or]: [

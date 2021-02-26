@@ -18,7 +18,12 @@ exports.Graphics = async (req, res) => {
         emulator_serial: building_emulator[0][0].emulator_serial
       }
     });
-    console.log("GRAPHICS", graphics);
+
+    // graphics.map(el => {
+    //   console.log(el.dataValues);
+    // });
+    // // });
+    // // console.log("GRAPHICS", graphics);
 
     const response = {
       description: "Graphics",

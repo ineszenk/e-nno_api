@@ -5,8 +5,10 @@ const swaggerDocument = require("../docs/swagger.json");
 var express = require("express");
 const volleyball = require("volleyball");
 const bodyParser = require("body-parser");
+var timeout = require("connect-timeout");
 
 const app = express();
+app.use(timeout("5s"));
 
 const swaggerOptions = {
   swaggerOptions: {
@@ -99,8 +101,18 @@ app.get(
 
 app.get("/static/:key", [authJwt.verifyToken], staticController.static);
 
-app.get("/kpi/:key", [authJwt.verifyToken], kpiController.Kpi);
+app.get(
+  "/kpi/:key",
+  timeout("5s"),
+  haltOnTimedout,
+  [authJwt.verifyToken],
+  kpiController.Kpi
+);
 
 app.get("/graphics/:key", [authJwt.verifyToken], graphicsController.Graphics);
+
+function haltOnTimedout(req, res, next) {
+  if (!req.timedout) next();
+}
 
 module.exports = app;
