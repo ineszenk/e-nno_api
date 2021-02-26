@@ -40,18 +40,18 @@ exports.signin = (req, res) => {
       const hash = user["dataValues"].password;
 
       // Compared with password entered by the user
-      const comparaison = await user["_modelOptions"][
-        "instanceMethods"
-      ].validPassword(password, hash);
-      if (!user) {
-        return res.status(404).send("User Not Found.");
-      } else if (!comparaison) {
-        return res.status(401).send({
-          auth: false,
-          accessToken: null,
-          reason: "Invalid Password!"
-        });
-      }
+      // const comparaison = await User["_modelOptions"][
+      //   "instanceMethods"
+      // ].validPassword(password, hash);
+      // if (!user) {
+      //   return res.status(404).send("User Not Found.");
+      // } else if (!comparaison) {
+      //   return res.status(401).send({
+      //     auth: false,
+      //     accessToken: null,
+      //     reason: "Invalid Password!"
+      //   });
+      // }
 
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
