@@ -109,7 +109,7 @@ app.get(
   kpiController.Kpi
 );
 
-app.get("/graphics/:key", [authJwt.verifyToken], graphicsController.Graphics);
+app.post("/graphics/:key", [authJwt.verifyToken], graphicsController.Graphics);
 
 function haltOnTimedout(req, res, next) {
   if (!req.timedout) next();

@@ -2,8 +2,11 @@ const { db, static_db } = require("../config/db.config.js");
 
 const dynamic_graphics = db.graphics;
 
+const Op = db.Sequelize.Op;
+
 exports.Graphics = async (req, res) => {
   const { key } = req.params;
+  const lastSeen = req.body.lastSeen;
 
   try {
     // GET GRAPHICS DATA
@@ -15,7 +18,8 @@ exports.Graphics = async (req, res) => {
 
     const graphics = await dynamic_graphics.findAll({
       where: {
-        emulator_serial: building_emulator[0][0].emulator_serial
+        emulator_serial: building_emulator[0][0].emulator_serial,
+        tmp: { [Op.gt]: lastSeen }
       }
     });
 
@@ -33,17 +37,6 @@ exports.Graphics = async (req, res) => {
         })
       );
     });
-    // });
-    // console.log("ALL", All);
-
-    // const response = {
-    //   description: "Graphics",
-    //   tt: graphics[0].tt,
-    //   conso_pred: graphics[0].conso_pred,
-    //   conso_measured: graphics[0].conso_measured,
-    //   opti: graphics[0].opti,
-    //   emulator_serial: graphics[0].emulator_serial
-    // };
 
     res.status(200).send(All);
   } catch (error) {
