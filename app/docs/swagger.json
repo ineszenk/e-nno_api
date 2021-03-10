@@ -30,7 +30,12 @@
     {
       "name": "Informations",
       "description": "Static data retrieval"
+    },
+    {
+      "name": "Building",
+      "description": "Building data retrieval"
     }
+
 
   ],
   "paths": {
@@ -221,6 +226,60 @@
               "application/json":   { 
                 "schema": {
                       "$ref": "#/components/schemas/Informations"
+                    }
+                }
+              }
+
+            },
+          "401": {
+            "description": "Invalid credential"
+          }
+        }
+      }
+    },
+    "/building/{egid}": {
+      "get": {
+        "tags": [
+        "Building"
+        ],
+        "summary": "Building informations",
+        "description": "Returns building's static informations",
+        "operationId": "getStaticData",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "User's access token",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg3NzYwMTR9.VRqDU8OJ4tf-LUqoUC64biIl6V9FEnQtfLZcUKKHnOY"
+            }
+          },
+
+          {
+            "name": "egid",
+            "in": "path",
+            "description": "Egid reference",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "1011891"
+            }
+          }
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Building Informations",
+            "content": {
+              "application/json":   { 
+                "schema": {
+                      "$ref": "#/components/schemas/Building"
                     }
                 }
               }
@@ -452,6 +511,78 @@
           }
 
 }
+},
+
+"Building":{
+  "type": "object",
+        "properties": {
+          "rue":{
+            "type":"string",
+            "example":"Chemin de la tour de Champel"
+          },
+          "numero":{
+            "type":"integer",
+            "example":"4"
+          },
+          "npa":{
+            "type":"integer",
+            "example":"1204"
+          },
+          "commune":{
+            "type":"string",
+            "example":"Genève"
+          },
+          "pays":{
+            "type":"string",
+            "example":"CH"
+          },
+          "latitude":{
+            "type":"decimal",
+            "example":"46.189734"
+          },
+          "longitude":{
+            "type":"decimal",
+            "example":"6.155010"
+          },
+
+          "affectation":{
+            "type":"string",
+            "example":"Habitat Collectif"
+          },
+          "sre":{
+            "type":"integer",
+            "example":"1580"
+          },
+          "periode_construction":{
+            "type":"string",
+            "example":"Période de 1919 à 1945"
+          },
+          "nombre_niveaux":{
+            "type":"integer",
+            "example":"7"
+          },
+          "client":{
+            "type":"string",
+            "example":"Proprietaire A"
+          },
+          "gerance":{
+            "type":"string",
+            "example":"Regis A SA"
+          },
+          "chauffagiste":{
+            "type":"string",
+            "example":"Chauffagiste A"
+          }
+
 }
+}
+
+
+
+
+
+
+
+
 }}
 }

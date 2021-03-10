@@ -23,6 +23,7 @@ const consumptionController = require("../controller/consumptionController.js");
 const metoeController = require("../controller/meteoController.js");
 const kpiController = require("../controller/kpiController.js");
 const graphicsController = require("../controller/graphicsController.js");
+const buildingController = require("../controller/buildingController.js");
 
 // logging middleware
 app.use(volleyball);
@@ -114,5 +115,7 @@ app.post("/graphics/:key", [authJwt.verifyToken], graphicsController.Graphics);
 function haltOnTimedout(req, res, next) {
   if (!req.timedout) next();
 }
+
+app.get("/building/:egid", [authJwt.verifyToken], buildingController.building);
 
 module.exports = app;
