@@ -26,6 +26,10 @@ exports.static = async (req, res) => {
       `SELECT * FROM chaudieres where buildingid = ${buildingId[0][0].id}`
     );
 
+    const start_optimisation = await static_db.multi(
+      `SELECT start_optimisation_date FROM regressions where emulator_serial = '${building_emulator[0][0]["emulator_serial"]}'`
+    );
+
     res.status(200).json({
       description: "Building Static Datas",
       emulator_serial: building_emulator[0][0]["emulator_serial"],
@@ -39,7 +43,8 @@ exports.static = async (req, res) => {
       affectation: archi_config[0][0].affectation,
       client: admin[0][0].client,
       gerance: admin[0][0].gerance,
-      manager: admin[0][0].manager
+      manager: admin[0][0].manager,
+      commissionning_date: start_optimisation[0][0].start_optimisation_date
     });
   } catch (error) {
     res.status(500).json({

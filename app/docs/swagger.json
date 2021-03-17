@@ -508,8 +508,12 @@
           "manager":{
             "type":"string",
             "example":"Chauffagiste A"
+          },
+          "commissionning_date":{
+            "type": "datetime",
+            "example":"2020-11-01 00:00:00",
+            "description": "Optimisation start date"
           }
-
 }
 },
 
