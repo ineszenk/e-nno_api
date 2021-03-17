@@ -32,7 +32,8 @@ exports.Kpi = async (req, res) => {
       intercept_opti: kpi[0].intercept_opti,
       slope_opti: kpi[0].slope_opti,
       last_updated: kpi[0].last_updated,
-      id_icon: kpi[0].id_icon
+      id_icon: kpi[0].id_icon,
+      forecasted_mean_tt: kpi[0].forecasted_mean_tt
     });
   } catch (error) {
     console.log(error);

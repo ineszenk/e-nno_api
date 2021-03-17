@@ -23,13 +23,18 @@ exports.Graphics = async (req, res) => {
           emulator_serial: building_emulator[0][0].emulator_serial
         }
       });
-      All.push({
-        tmp: graphics[0].dataValues.tmp,
-        tt: graphics[0].dataValues.tt,
-        conso_pred: graphics[0].dataValues.conso_pred,
-        conso_measured: graphics[0].dataValues.conso_measured,
-        opti: graphics[0].dataValues.opti,
-        emulator_serial: graphics[0].dataValues.emulator_serial
+      console.log(graphics);
+      graphics.map(el => {
+        console.log(
+          All.push({
+            tmp: el.dataValues.tmp,
+            tt: el.dataValues.tt,
+            conso_pred: el.dataValues.conso_pred,
+            conso_measured: el.dataValues.conso_measured,
+            opti: el.dataValues.opti,
+            emulator_serial: el.dataValues.emulator_serial
+          })
+        );
       });
     } else {
       const graphics = await dynamic_graphics.findAll({
