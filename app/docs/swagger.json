@@ -477,7 +477,7 @@
             "type":"integer",
             "example":"1204"
           },
-          "commune":{
+          "lieu":{
             "type":"string",
             "example":"Genève"
           },
@@ -509,7 +509,7 @@
             "type":"string",
             "example":"Chauffagiste A"
           },
-          "commissionning_date":{
+          "date_mise_en_service":{
             "type": "datetime",
             "example":"2020-11-01 00:00:00",
             "description": "Optimisation start date"

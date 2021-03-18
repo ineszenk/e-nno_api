@@ -36,7 +36,7 @@ exports.static = async (req, res) => {
       egid: geo_config.egid,
       adresse: geo_config[0][0].adresse,
       npa: geo_config[0][0].npa,
-      commune: geo_config[0][0].commune,
+      lieu: geo_config[0][0].commune,
       latitude: geo_config[0][0].latitude,
       longitude: geo_config[0][0].longitude,
       agent_energetique: chaudiere_config[0][0].agent_energetique,
@@ -44,7 +44,7 @@ exports.static = async (req, res) => {
       client: admin[0][0].client,
       gerance: admin[0][0].gerance,
       manager: admin[0][0].manager,
-      commissionning_date: start_optimisation[0][0].start_optimisation_date
+      date_mise_en_service: start_optimisation[0][0].start_optimisation_date
     });
   } catch (error) {
     res.status(500).json({
