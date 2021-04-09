@@ -7,8 +7,6 @@ const User = db.user;
 verifyToken = (req, res, next) => {
   let token = req.headers["authorization"] || req.headers["access-token"];
 
-  console.log("token", token);
-
   // Remove Bearer from string
   token = token.slice(7, token.length);
 
@@ -20,8 +18,6 @@ verifyToken = (req, res, next) => {
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
-    console.log(token);
-    console.log(config.secret);
 
     if (err) {
       return res.status(500).send({
@@ -40,7 +36,6 @@ isAdmin = (req, res, next) => {
   User.findById(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
-        console.log(roles[i].name);
         if (roles[i].name.toUpperCase() === "ADMIN") {
           next();
           return;

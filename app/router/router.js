@@ -89,16 +89,16 @@ app.get(
 );
 
 app.get(
-  "/consumption/:enno_serial/:startDate/:endDate",
+  "/consumption",
   [authJwt.verifyToken],
   consumptionController.Consumption
 );
 
-app.get(
-  "/consumption/:enno_serial",
-  [authJwt.verifyToken],
-  consumptionController.ConsumptionLast
-);
+// app.get(
+//   "/consumption/:enno_serial",
+//   [authJwt.verifyToken],
+//   consumptionController.ConsumptionLast
+// );
 
 app.get("/static/:key", [authJwt.verifyToken], staticController.static);
 

@@ -3,6 +3,7 @@ const config = require("../config/config.js");
 const User = db.user;
 
 var jwt = require("jsonwebtoken");
+var bcrypt = require('bcryptjs');
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -24,7 +25,6 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
   console.log("Sign-In");
-  console.log(req.body);
 
   const password = req.body.password;
   const username = req.body.username;
@@ -35,23 +35,14 @@ exports.signin = (req, res) => {
     }
   })
     .then(async user => {
-      console.log("USER", user);
       // Get hashed password
       const hash = user["dataValues"].password;
 
       // Compared with password entered by the user
-      // const comparaison = await User["_modelOptions"][
-      //   "instanceMethods"
-      // ].validPassword(password, hash);
-      // if (!user) {
-      //   return res.status(404).send("User Not Found.");
-      // } else if (!comparaison) {
-      //   return res.status(401).send({
-      //     auth: false,
-      //     accessToken: null,
-      //     reason: "Invalid Password!"
-      //   });
-      // }
+      var passwordIsValid = bcrypt.compareSync(password, hash);
+      if (!passwordIsValid) {
+          return res.status(401).send({ auth: false, accessToken: null, reason: "Invalid Password!" });
+      }
 
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400 // expires in 24 hours

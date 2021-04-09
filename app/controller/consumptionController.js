@@ -1,42 +1,17 @@
-const { db, static_db } = require("../config/db.config.js");
+const { db } = require("../config/db.config.js");
 
-const Pulse = db.pulse;
-const Ftp = db.ftp;
-
+const Kwh_conso = db.kwh_conso
 const Op = db.Sequelize.Op;
 
 exports.Consumption = async (req, res, next) => {
-  const { enno_serial, startDate, endDate } = req.params;
-
-  // GET STATIC DATA FROM E-NNO BUILDING DATABASE
-  const buildingId = await static_db.multi(
-    `SELECT * FROM buildings where emulator_serial = '${enno_serial}'`
-  );
-
-  const conso_config = await static_db.multi(
-    `SELECT * FROM chaudieres where buildingid = ${buildingId[0][0].id}`
-  );
-
-  const type_comptage = conso_config[0][0].type_comptage;
-
-  if (type_comptage === "Pulse" || type_comptage === "MBUS") {
-    try {
-      // GET PULSE CONSO DATA FROM DS DATABASE
-
-      const pulse = await Pulse.findAll({
+  const { serial, startDate, endDate } = req.body;
+  try {
+  // GET A DEVICE'S KWH CONSUMPTION FROM HISTORY RETRIEVAL DATABASE BETWEEN 2 DATES
+  const kwh_consumption = await Kwh_conso.findAll({
         where: {
           enno_serial: {
-            [Op.or]: [
-              enno_serial,
-              `${enno_serial}-Pulse`,
-              `${enno_serial}-Pulse `,
-              `${enno_serial}-Pulse1`,
-              `${enno_serial}-Pulse2`,
-              `${enno_serial}-Pulse3`,
-              `${enno_serial}-Mbus `,
-              `${enno_serial}-Mbus`,
-              "2020-05-10-001-Mbus "
-            ]
+            [Op.startsWith]: 
+            serial
           },
           [Op.or]: [
             {
@@ -48,96 +23,40 @@ exports.Consumption = async (req, res, next) => {
         }
       });
 
-      let pulse_parsed = [];
+      let kwh_parsed = [];
 
-      pulse.map(el =>
-        pulse_parsed.push({
+      kwh_consumption.map(el =>
+        kwh_parsed.push({
           tmp: el.tmp,
-          value: el.value,
-          cmd_name: el.cmd_name
+          kWh: el.value,
+          serial: el.enno_serial
         })
-      );
+      )
 
-      console.log(pulse_parsed);
 
       res.status(200).json({
-        description: "Consumption data (Kwh)",
-        Consumption: pulse_parsed
-      });
+        description: "Consumption data (kWh)",
+        Consumption: kwh_parsed
+      })
+
     } catch (error) {
       res.status(500).json({
-        description: "Can not access Consumption Data",
-        error: error
-      });
-    }
-  } else if (type_comptage === "FTP") {
-    try {
-      const ftp = await Ftp.findAll({
-        where: {
-          enno_serial: `${enno_serial} FTP`,
-          [Op.or]: [
-            {
-              tmp: {
-                [Op.between]: [startDate, endDate]
-              }
-            }
-          ]
-        }
-      });
-
-      let ftp_parsed = [];
-
-      ftp.map(el =>
-        ftp_parsed.push({
-          tmp: el.tmp,
-          value: el.value,
-          cmd_name: el.cmd_name
-        })
-      );
-
-      res.status(200).json({
-        description: "Consumption data (Kwh)",
-        Consumption: ftp_parsed
-      });
-    } catch {
-      res.status(500).json({
-        description: "Can not access Consumption Data",
+        description: "Consumption Data not available for this device during the requested period",
         error: error
       });
     }
   }
-};
-
+  
 exports.ConsumptionLast = async (req, res, next) => {
   const { enno_serial } = req.params;
 
-  // GET STATIC DATA FROM E-NNO BUILDING DATABASE
-  const buildingId = await static_db.multi(
-    `SELECT * FROM buildings where emulator_serial = '${enno_serial}'`
-  );
-
-  const conso_config = await static_db.multi(
-    `SELECT * FROM chaudieres where buildingid = ${buildingId[0][0].id}`
-  );
-
-  const type_comptage = conso_config[0][0].type_comptage;
-
-  if (type_comptage === "Pulse" || type_comptage === "Pulse") {
+  // GET LAST 24HOURS KWH CONSUMPTION FOR A DEVICE 
     try {
-      // GET PULSE CONSO DATA FROM DS DATABASE
-      const pulse_last = await Pulse.findAll({
+      const kwh_last = await Kwh_conso.findAll({
         where: {
           enno_serial: {
-            [Op.or]: [
-              enno_serial,
-              `${enno_serial}-Pulse`,
-              `${enno_serial}-Pulse `,
-              `${enno_serial}-Pulse1`,
-              `${enno_serial}-Pulse2`,
-              `${enno_serial}-Pulse3`,
-              `${enno_serial}-Mbus `,
-              `${enno_serial}-Mbus`
-            ]
+            [Op.startsWith]: 
+              enno_serial
           },
           [Op.or]: [
             {
@@ -152,63 +71,24 @@ exports.ConsumptionLast = async (req, res, next) => {
         }
       });
 
-      let pulse_last_parsed = [];
+      let kwh_last_parsed = [];
 
-      pulse_last.map(el =>
-        pulse_last_parsed.push({
+      kwh_last.map(el =>
+        kwh_last_parsed.push({
           tmp: el.tmp,
-          value: el.value,
-          cmd_name: el.cmd_name
-        })
-      );
+          kWh: el.value,
+          serial: el.enno_serial
+         }))
 
       res.status(200).json({
-        description: "Consumption data (Kwh)",
-        Consumption: pulse_last_parsed
+        description: "Consumption data (kWh)",
+        Consumption: kwh_last_parsed
       });
     } catch (error) {
       res.status(500).json({
-        description: "Can not access Consumption Data",
-        error: error
-      });
-    }
-  } else if (type_comptage === "FTP") {
-    try {
-      const ftp = await Ftp.findAll({
-        where: {
-          enno_serial: `${enno_serial} FTP`,
-          [Op.or]: [
-            {
-              tmp: {
-                [Op.between]: [
-                  new Date(),
-                  new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-                ]
-              }
-            }
-          ]
-        }
-      });
-
-      let ftp_last_parsed = [];
-
-      ftp_last.map(el =>
-        ftp_last_parsed.push({
-          tmp: el.tmp,
-          value: el.value,
-          cmd_name: el.cmd_name
-        })
-      );
-
-      res.status(200).json({
-        description: "Consumption data (Kwh)",
-        Consumption: ftp_last_parsed
-      });
-    } catch {
-      res.status(500).json({
-        description: "Can not access Consumption Data",
+        description: "Consumption Data not available for this device during the requested period",
         error: error
       });
     }
   }
-};
+

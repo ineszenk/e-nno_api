@@ -20,6 +20,8 @@ module.exports = function(sequelize, Sequelize) {
       type: Sequelize.TEXT,
       allowNull: true
     }
+  }, {
+    timestamps:false
   });
   return Kwh_conso;
 };

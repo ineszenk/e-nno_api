@@ -15,17 +15,13 @@ exports.Graphics = async (req, res) => {
       `SELECT emulator_serial FROM buildings where key = '${key}'`
     );
 
-    console.log("EMULATOR SERIAL", building_emulator);
-
     if (!lastSeen || lastSeen === "") {
       const graphics = await dynamic_graphics.findAll({
         where: {
           emulator_serial: building_emulator[0][0].emulator_serial
         }
       });
-      console.log(graphics);
       graphics.map(el => {
-        console.log(
           All.push({
             tmp: el.dataValues.tmp,
             tt: el.dataValues.tt,
@@ -34,7 +30,6 @@ exports.Graphics = async (req, res) => {
             opti: el.dataValues.opti,
             emulator_serial: el.dataValues.emulator_serial
           })
-        );
       });
     } else {
       const graphics = await dynamic_graphics.findAll({
@@ -44,7 +39,6 @@ exports.Graphics = async (req, res) => {
         }
       });
       graphics.map(el => {
-        console.log(
           All.push({
             tmp: el.dataValues.tmp,
             tt: el.dataValues.tt,
@@ -53,7 +47,6 @@ exports.Graphics = async (req, res) => {
             opti: el.dataValues.opti,
             emulator_serial: el.dataValues.emulator_serial
           })
-        );
       });
     }
 

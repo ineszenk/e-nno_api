@@ -4,7 +4,6 @@ const Meteo = db.meteo;
 const Op = db.Sequelize.Op;
 
 exports.Meteo = async (req, res, next) => {
-  console.log(req.params);
   const { enno_serial, startDate, endDate } = req.params;
 
   try {

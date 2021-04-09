@@ -16,5 +16,4 @@ sequelize_connection()
   .catch(error => {
     logger.error("ERROR", { catch_error: error });
 
-    // console.log(error);
   });
