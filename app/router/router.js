@@ -62,17 +62,17 @@ app.get(
 
 // Get Meteo data for a given period
 app.get(
-  "/meteo/:enno_serial/:startDate/:endDate",
+  "/meteo",
   [authJwt.verifyToken],
   metoeController.Meteo
 );
 
 // Get Meteo data for the last 24h
-app.get(
-  "/meteo/:enno_serial",
-  [authJwt.verifyToken],
-  metoeController.MeteoLast
-);
+// app.get(
+//   "/meteo/:enno_serial",
+//   [authJwt.verifyToken],
+//   metoeController.MeteoLast
+// );
 
 // Get Hydraulic Group data
 app.get(

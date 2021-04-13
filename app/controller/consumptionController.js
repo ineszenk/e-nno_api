@@ -4,14 +4,14 @@ const Kwh_conso = db.kwh_conso
 const Op = db.Sequelize.Op;
 
 exports.Consumption = async (req, res, next) => {
-  const { serial, startDate, endDate } = req.body;
+  const { enno_serial, startDate, endDate } = req.body;
   try {
   // GET A DEVICE'S KWH CONSUMPTION FROM HISTORY RETRIEVAL DATABASE BETWEEN 2 DATES
   const kwh_consumption = await Kwh_conso.findAll({
         where: {
           enno_serial: {
             [Op.startsWith]: 
-            serial
+            enno_serial
           },
           [Op.or]: [
             {
@@ -29,19 +29,19 @@ exports.Consumption = async (req, res, next) => {
         kwh_parsed.push({
           tmp: el.tmp,
           kWh: el.value,
-          serial: el.enno_serial
+          enno_serial: el.enno_serial
         })
       )
 
 
       res.status(200).json({
-        description: "Consumption data (kWh)",
+        Description: "Consumption data (kWh)",
         Consumption: kwh_parsed
       })
 
     } catch (error) {
       res.status(500).json({
-        description: "Consumption Data not available for this device during the requested period",
+        Description: "Consumption Data not available for this device during the requested period",
         error: error
       });
     }
@@ -77,11 +77,11 @@ exports.ConsumptionLast = async (req, res, next) => {
         kwh_last_parsed.push({
           tmp: el.tmp,
           kWh: el.value,
-          serial: el.enno_serial
+          enno_serial: el.enno_serial
          }))
 
       res.status(200).json({
-        description: "Consumption data (kWh)",
+        Description: "Consumption data (kWh)",
         Consumption: kwh_last_parsed
       });
     } catch (error) {

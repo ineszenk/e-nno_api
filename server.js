@@ -5,7 +5,6 @@ const logger = require("./app/logger.js");
 // Create a Server
 const PORT = process.env.PORT || 8000;
 
-logger.error("ERROR");
 
 sequelize_connection()
   .then(() => {
@@ -14,6 +13,6 @@ sequelize_connection()
     });
   })
   .catch(error => {
-    logger.error("ERROR", { catch_error: error });
+    logger.error(error, { catch_error: error });
 
   });
