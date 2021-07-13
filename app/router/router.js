@@ -118,4 +118,6 @@ function haltOnTimedout(req, res, next) {
 
 app.get("/building/:egid", [authJwt.verifyToken], buildingController.building);
 
+app.get("/building_info/:serial", [authJwt.verifyToken],staticController.static_serial)
+
 module.exports = app;
